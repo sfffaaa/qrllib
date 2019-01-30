@@ -7,6 +7,17 @@
 
 # QRL Core Library
 
+**Jay**
+The test for measuring the time of key generation/the time of encrypting json plaintext/the time of decrypting the json plaintext/length of cipher message is added.
+How to Build:
+
+1. git clone dilithium/kyber/PicoSHA2/xmss-reference to folder, deps
+2. cmake .
+3. need add extern "C" to all global varibles in deps/kyber/ref/precomp.c becasuse g++ will add mangling automatically. https://stackoverflow.com/questions/524633/how-can-i-avoid-name-mangling
+4. build it
+
+
+
 *WARNING: This is work in progress, changes might not be backward compatible.*
 
 This library currently exposes the following functionality:  
