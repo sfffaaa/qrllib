@@ -1,14 +1,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE or http://www.opensource.org/licenses/mit-license.php.
-#include <xmss-alt/algsxmss.h>
 #include <xmssBasic.h>
 #include <iostream>
 #include "gtest/gtest.h"
 #include <misc.h>
-#include <qrl/qrlHelper.h>
+#include <qrl/misc.h>
 
 namespace {
 #define XMSS_HEIGHT 4
+#define NTESTS 50
 
 #define TEST_JSON_PLAINTEXT "{\n" \
 "		body: {\n" \
@@ -26,41 +26,29 @@ namespace {
 
 TEST(XmssBasic_Default, JsonPlaintextTest)
 {
-    std::vector<unsigned char> seed;
-    for (unsigned char i = 0; i<48; i++)
-        seed.push_back(i);
+	std::string message = TEST_JSON_PLAINTEXT;
+	std::vector<unsigned char> data_ref(message.begin(), message.end());
+	std::vector<unsigned char> data(message.begin(), message.end());
 
-    //generate
-    XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_128, eAddrFormatType::SHA256_2X);
-    auto pk = xmss.getPK();
-    //finish generate
+	for (unsigned int times = 0; times < NTESTS; times++) {
+		std::vector<unsigned char> seed = getRandomSeed(48, std::string(""));
 
-    std::string message = TEST_JSON_PLAINTEXT;
-    std::vector<unsigned char> data_ref(message.begin(), message.end());
-    std::vector<unsigned char> data(message.begin(), message.end());
+		//generate
+		XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_128, eAddrFormatType::SHA256_2X);
+		auto pk = xmss.getPK();
+		//finish generate
 
-    //sign
-    auto signature = xmss.sign(data);
-    //finish signed
+		//sign
+		auto signature = xmss.sign(data);
+		//finish signed
 
+		// verify
+		bool valid = XmssBasic::verify(data, signature, pk);
+		// finish verify
 
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << "data       :" << data.size() << " bytes\n" << bin2hstr(data, 64) << std::endl;
-    std::cout << "signature  :" << signature.size() << " bytes\n" << bin2hstr(signature, 64) << std::endl;
-
-    // verify
-    bool valid = XmssBasic::verify(data, signature, pk);
-    // finish verify
-
-    EXPECT_TRUE(valid);
-    EXPECT_EQ(data, data_ref);
-
-    auto sk = xmss.getSK();
-    std::cout << std::endl;
-    std::cout << "seed:" << seed.size() << " bytes\n" << bin2hstr(seed, 32) << std::endl;
-    std::cout << "pk  :" << pk.size() << " bytes\n" << bin2hstr(pk, 32) << std::endl;
-    std::cout << "sk  :" << sk.size() << " bytes\n" << bin2hstr(sk, 32) << std::endl;
+		EXPECT_TRUE(valid);
+		EXPECT_EQ(data, data_ref);
+	}
 }
 
 }
