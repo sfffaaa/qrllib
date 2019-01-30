@@ -70,6 +70,11 @@ file(GLOB LIB_KYBER_INCLUDES
 file(GLOB_RECURSE LIB_QRL_SRC
         "${CMAKE_CURRENT_SOURCE_DIR}/src/qrl/*.cpp")
 
+############## mytest
+file(GLOB_RECURSE LIB_MYTEST_SRC
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/mytest_lib/*.c")
+#############
+
 file(GLOB_RECURSE LIB_DILITHIUM_SRC
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dilithium/*.cpp")
 
@@ -119,7 +124,7 @@ set(REF_KYBER_SRC
 
 ########################## MYTEST
 file(GLOB_RECURSE MYTEST_QRL_SRC
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/cpp/qrl/my*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/cpp/qrl_mytest/my*.cpp")
 ##########################
 
 file(GLOB_RECURSE TEST_QRL_SRC
@@ -140,6 +145,8 @@ SET_SOURCE_FILES_PROPERTIES(${LIBXMSSALT_SRC} PROPERTIES LANGUAGE CXX)
 SET_SOURCE_FILES_PROPERTIES(${LIB_SHASHA_SRC} PROPERTIES LANGUAGE CXX)
 
 ########################## MYTEST
+SET_SOURCE_FILES_PROPERTIES(${LIB_MYTEST_SRC} PROPERTIES LANGUAGE CXX)
+SET_SOURCE_FILES_PROPERTIES(${MYTEST_QRL_SRC} PROPERTIES COMPILE_FLAGS -Wall)
 SET_SOURCE_FILES_PROPERTIES(${MYTEST_QRL_SRC} PROPERTIES LANGUAGE CXX)
 ##########################
 SET_SOURCE_FILES_PROPERTIES(${TEST_QRL_SRC} PROPERTIES LANGUAGE CXX)
@@ -172,6 +179,11 @@ add_library(kyber STATIC
         ${REF_KYBER_SRC})
 target_include_directories(kyber PRIVATE
         ${LIB_KYBER_INCLUDES} )
+
+########################## MYTEST
+add_library(mytest_lib STATIC
+        ${LIB_MYTEST_SRC})
+##########################
 
 if (BUILD_TESTS)
     message(STATUS "GTests enabled")
@@ -231,7 +243,7 @@ if (BUILD_TESTS)
     target_include_directories( myqrllib_test PRIVATE
             ${LIB_QRL_INCLUDES}
             ${LIB_SHASHA_INCLUDES})
-    target_link_libraries(myqrllib_test qrllib gtest_main)
+    target_link_libraries(myqrllib_test qrllib gtest_main mytest_lib)
     ###########################
 
     add_executable(shasha_test
