@@ -72,3 +72,6 @@ tests/js/tmp/*.js
 tests/js/tmp/*.wasm
 
 \.npmrc
+*.sw*
+tags
+cscope.out
