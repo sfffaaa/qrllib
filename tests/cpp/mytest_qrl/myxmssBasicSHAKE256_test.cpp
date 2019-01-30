@@ -27,7 +27,7 @@ namespace {
 
 unsigned long long timing_overhead;
 
-TEST(XmssBasic_test, JsonPlaintextTest)
+TEST(XmssBasicSHAKE256_test, JsonPlaintextTest)
 {
 	std::string message = TEST_JSON_PLAINTEXT;
 	std::vector<unsigned char> data_ref(message.begin(), message.end());
@@ -37,7 +37,7 @@ TEST(XmssBasic_test, JsonPlaintextTest)
 		std::vector<unsigned char> seed = getRandomSeed(48, std::string(""));
 
 		//generate
-		XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_128, eAddrFormatType::SHA256_2X);
+        XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_256, eAddrFormatType::SHA256_2X);
 		auto pk = xmss.getPK();
 		//finish generate
 
@@ -54,7 +54,7 @@ TEST(XmssBasic_test, JsonPlaintextTest)
 	}
 }
 
-TEST(XmssBasic_test, JsonPlaintextRun)
+TEST(XmssBasicSHAKE256_test, JsonPlaintextRun)
 {
 	std::string message = TEST_JSON_PLAINTEXT;
 	std::vector<unsigned char> data_ref(message.begin(), message.end());
@@ -68,7 +68,7 @@ TEST(XmssBasic_test, JsonPlaintextRun)
 
 		//generate
 		tkeygen[i] = cpucycles_start();
-		XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_128, eAddrFormatType::SHA256_2X);
+        XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_256, eAddrFormatType::SHA256_2X);
 		auto pk = xmss.getPK();
 		tkeygen[i] = cpucycles_stop() - tkeygen[i] - timing_overhead;
 		//finish generate

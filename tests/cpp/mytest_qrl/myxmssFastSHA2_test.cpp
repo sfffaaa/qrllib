@@ -1,6 +1,6 @@
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE or http://www.opensource.org/licenses/mit-license.php.
-#include <xmssBasic.h>
+#include <xmssFast.h>
 #include <iostream>
 #include "gtest/gtest.h"
 #include <qrl/misc.h>
@@ -27,7 +27,7 @@ namespace {
 
 unsigned long long timing_overhead;
 
-TEST(XmssBasic_test, JsonPlaintextTest)
+TEST(XmssFastSHA2_test, JsonPlaintextTest)
 {
 	std::string message = TEST_JSON_PLAINTEXT;
 	std::vector<unsigned char> data_ref(message.begin(), message.end());
@@ -37,7 +37,7 @@ TEST(XmssBasic_test, JsonPlaintextTest)
 		std::vector<unsigned char> seed = getRandomSeed(48, std::string(""));
 
 		//generate
-		XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_128, eAddrFormatType::SHA256_2X);
+        XmssFast xmss(seed, XMSS_HEIGHT, eHashFunction::SHA2_256, eAddrFormatType::SHA256_2X);
 		auto pk = xmss.getPK();
 		//finish generate
 
@@ -46,7 +46,7 @@ TEST(XmssBasic_test, JsonPlaintextTest)
 		//finish signed
 
 		// verify
-		bool valid = XmssBasic::verify(data, signature, pk);
+		bool valid = XmssFast::verify(data, signature, pk);
 		// finish verify
 
 		EXPECT_TRUE(valid);
@@ -54,7 +54,7 @@ TEST(XmssBasic_test, JsonPlaintextTest)
 	}
 }
 
-TEST(XmssBasic_test, JsonPlaintextRun)
+TEST(XmssFastSHA2_test, JsonPlaintextRun)
 {
 	std::string message = TEST_JSON_PLAINTEXT;
 	std::vector<unsigned char> data_ref(message.begin(), message.end());
@@ -68,7 +68,7 @@ TEST(XmssBasic_test, JsonPlaintextRun)
 
 		//generate
 		tkeygen[i] = cpucycles_start();
-		XmssBasic xmss(seed, XMSS_HEIGHT, eHashFunction::SHAKE_128, eAddrFormatType::SHA256_2X);
+        XmssFast xmss(seed, XMSS_HEIGHT, eHashFunction::SHA2_256, eAddrFormatType::SHA256_2X);
 		auto pk = xmss.getPK();
 		tkeygen[i] = cpucycles_stop() - tkeygen[i] - timing_overhead;
 		//finish generate
@@ -81,7 +81,7 @@ TEST(XmssBasic_test, JsonPlaintextRun)
 
 		// verify
 		tverify[i] = cpucycles_start();
-		bool valid = XmssBasic::verify(data, signature, pk);
+		bool valid = XmssFast::verify(data, signature, pk);
 		tverify[i] = cpucycles_stop() - tverify[i] - timing_overhead;
 		// finish verify
 
