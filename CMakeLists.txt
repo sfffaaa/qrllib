@@ -124,7 +124,7 @@ set(REF_KYBER_SRC
 
 ########################## MYTEST
 file(GLOB_RECURSE MYTEST_QRL_SRC
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/cpp/qrl_mytest/my*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/cpp/mytest_qrl/my*.cpp")
 ##########################
 
 file(GLOB_RECURSE TEST_QRL_SRC
@@ -237,13 +237,13 @@ if (BUILD_TESTS)
     add_test(gtest ${PROJECT_BINARY_DIR}/qrllib_test)
 
     ########################## MYTEST
-    add_executable(myqrllib_test
+    add_executable(mytest_qrl
             ${MYTEST_QRL_SRC})
 
-    target_include_directories( myqrllib_test PRIVATE
+    target_include_directories( mytest_qrl PRIVATE
             ${LIB_QRL_INCLUDES}
             ${LIB_SHASHA_INCLUDES})
-    target_link_libraries(myqrllib_test qrllib gtest_main mytest_lib)
+    target_link_libraries(mytest_qrl qrllib gtest_main mytest_lib)
     ###########################
 
     add_executable(shasha_test

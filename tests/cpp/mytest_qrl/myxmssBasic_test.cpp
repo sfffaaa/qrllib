@@ -3,7 +3,6 @@
 #include <xmssBasic.h>
 #include <iostream>
 #include "gtest/gtest.h"
-#include <misc.h>
 #include <qrl/misc.h>
 #include <mytest_lib/cpucycles.h>
 #include <mytest_lib/speed.h>
