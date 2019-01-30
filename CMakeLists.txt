@@ -117,6 +117,11 @@ set(REF_KYBER_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/deps/kyber/ref/fips202.c
         )
 
+########################## MYTEST
+file(GLOB_RECURSE MYTEST_QRL_SRC
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/cpp/qrl/my*.cpp")
+##########################
+
 file(GLOB_RECURSE TEST_QRL_SRC
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/cpp/qrl/*.cpp")
 
@@ -134,6 +139,9 @@ SET_SOURCE_FILES_PROPERTIES(${LIB_QRL_SRC} PROPERTIES LANGUAGE CXX)
 SET_SOURCE_FILES_PROPERTIES(${LIBXMSSALT_SRC} PROPERTIES LANGUAGE CXX)
 SET_SOURCE_FILES_PROPERTIES(${LIB_SHASHA_SRC} PROPERTIES LANGUAGE CXX)
 
+########################## MYTEST
+SET_SOURCE_FILES_PROPERTIES(${MYTEST_QRL_SRC} PROPERTIES LANGUAGE CXX)
+##########################
 SET_SOURCE_FILES_PROPERTIES(${TEST_QRL_SRC} PROPERTIES LANGUAGE CXX)
 SET_SOURCE_FILES_PROPERTIES(${TEST_DILITHIUM_SRC} PROPERTIES LANGUAGE CXX)
 SET_SOURCE_FILES_PROPERTIES(${TEST_KYBER_SRC} PROPERTIES LANGUAGE CXX)
@@ -216,6 +224,14 @@ if (BUILD_TESTS)
     target_link_libraries(qrllib_test qrllib gtest_main)
     add_test(gtest ${PROJECT_BINARY_DIR}/qrllib_test)
 
+    ########################## MYTEST
+    add_executable(myqrllib_test
+            ${MYTEST_QRL_SRC})
+
+    target_include_directories( myqrllib_test PRIVATE
+            ${LIB_QRL_INCLUDES}
+            ${LIB_SHASHA_INCLUDES})
+    target_link_libraries(myqrllib_test qrllib gtest_main)
     ###########################
 
     add_executable(shasha_test
